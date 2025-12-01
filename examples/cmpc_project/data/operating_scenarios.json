@@ -1,0 +1,70 @@
+{
+  "operating_scenarios": [
+    {
+      "scenario": 1,
+      "air_demand_m3_per_min": 90,
+      "probability_percent": 2,
+      "compressors_active": [1, 6],
+      "thermal_power_kW": 442,
+      "water_flow_m3_per_h": 15.32
+    },
+    {
+      "scenario": 2,
+      "air_demand_m3_per_min": 130,
+      "probability_percent": 1,
+      "compressors_active": [1, 2, 4],
+      "thermal_power_kW": 622,
+      "water_flow_m3_per_h": 21.72
+    },
+    {
+      "scenario": 3,
+      "air_demand_m3_per_min": 131,
+      "probability_percent": 80,
+      "compressors_active": [1, 2, 4],
+      "thermal_power_kW": 622,
+      "water_flow_m3_per_h": 21.72,
+      "notes": "NORMAL OPERATION - Design basis"
+    },
+    {
+      "scenario": 4,
+      "air_demand_m3_per_min": 140,
+      "probability_percent": 1,
+      "compressors_active": [1, 2, 4],
+      "thermal_power_kW": 622,
+      "water_flow_m3_per_h": 21.72
+    },
+    {
+      "scenario": 5,
+      "air_demand_m3_per_min": 150,
+      "probability_percent": 1,
+      "compressors_active": [1, 2, 6],
+      "thermal_power_kW": 688,
+      "water_flow_m3_per_h": 23.93
+    },
+    {
+      "scenario": 6,
+      "air_demand_m3_per_min": 174,
+      "probability_percent": 14,
+      "compressors_active": [1, 2, 4, 5],
+      "thermal_power_kW": 752,
+      "water_flow_m3_per_h": 26.22
+    },
+    {
+      "scenario": 7,
+      "air_demand_m3_per_min": 218,
+      "probability_percent": 2,
+      "compressors_active": [1, 2, 4, 5, 6],
+      "thermal_power_kW": 948,
+      "water_flow_m3_per_h": 32.93,
+      "notes": "MAXIMUM CAPACITY"
+    }
+  ],
+  
+  "design_conditions": {
+    "normal_operation_scenario": 3,
+    "design_thermal_power_kW": 622,
+    "design_water_flow_m3_per_h": 21.72,
+    "maximum_thermal_power_kW": 948,
+    "maximum_water_flow_m3_per_h": 32.93
+  }
+}

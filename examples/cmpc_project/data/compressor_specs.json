@@ -1,0 +1,102 @@
+{
+  "project_info": {
+    "client": "Papeles Cordillera S.A. (CMPC Puente Alto)",
+    "location": "Región Metropolitana, Puente Alto, Chile",
+    "date": "2024-12-01",
+    "consultant": "Leycero SpA",
+    "equipment_supplier": "Kaeser Compresores de Chile"
+  },
+  
+  "compressors": [
+    {
+      "id": 1,
+      "model": "FSD 575",
+      "nominal_power_kW": 315,
+      "thermal_recovery_max_kW": 246,
+      "thermal_recovery_MJ_per_h": 886,
+      "water_flow_m3_per_h": 8.61,
+      "delta_T_K": 25,
+      "pressure_drop_bar": 0.4,
+      "flange_connection": "DN 50 PN 16",
+      "status": "operational"
+    },
+    {
+      "id": 2,
+      "model": "FSD 575",
+      "nominal_power_kW": 315,
+      "thermal_recovery_max_kW": 246,
+      "thermal_recovery_MJ_per_h": 886,
+      "water_flow_m3_per_h": 8.61,
+      "delta_T_K": 25,
+      "pressure_drop_bar": 0.4,
+      "flange_connection": "DN 50 PN 16",
+      "status": "operational"
+    },
+    {
+      "id": 3,
+      "model": "FSD 575",
+      "nominal_power_kW": 315,
+      "thermal_recovery_max_kW": 246,
+      "thermal_recovery_MJ_per_h": 886,
+      "water_flow_m3_per_h": 8.61,
+      "delta_T_K": 25,
+      "pressure_drop_bar": 0.4,
+      "flange_connection": "DN 50 PN 16",
+      "status": "backup",
+      "notes": "100% backup unit - only operates if unit 1 or 2 fails"
+    },
+    {
+      "id": 4,
+      "model": "DSDX 305",
+      "nominal_power_kW": 160,
+      "thermal_recovery_max_kW": 130,
+      "thermal_recovery_MJ_per_h": 467,
+      "water_flow_m3_per_h": 4.5,
+      "delta_T_K": 25,
+      "pressure_drop_bar": 0.25,
+      "flange_connection": "DN 40 PN 16",
+      "status": "operational"
+    },
+    {
+      "id": 5,
+      "model": "DSDX 305",
+      "nominal_power_kW": 160,
+      "thermal_recovery_max_kW": 130,
+      "thermal_recovery_MJ_per_h": 467,
+      "water_flow_m3_per_h": 4.5,
+      "delta_T_K": 25,
+      "pressure_drop_bar": 0.25,
+      "flange_connection": "DN 40 PN 16",
+      "status": "operational"
+    },
+    {
+      "id": 6,
+      "model": "ESD 445",
+      "nominal_power_kW": 250,
+      "thermal_recovery_max_kW": 196,
+      "thermal_recovery_MJ_per_h": 702,
+      "water_flow_m3_per_h": 6.71,
+      "delta_T_K": 25,
+      "pressure_drop_bar": 0.4,
+      "flange_connection": "DN 40 PN 16",
+      "status": "operational"
+    }
+  ],
+  
+  "industrial_water_specs": {
+    "temperature_min_C": 6,
+    "temperature_max_C": 16,
+    "pressure_min_bar": 3.7,
+    "pressure_max_bar": 4.2,
+    "flow_rate_min_m3_per_h": 27,
+    "flow_rate_max_m3_per_h": 50
+  },
+  
+  "system_constraints": {
+    "piping_height_mm": 3606,
+    "pump_mounting_height_mm": 2360,
+    "building_layout": "see layout drawings",
+    "must_isolate_circuits": true,
+    "notes": "Heat recovery circuit must be isolated from industrial water system"
+  }
+}
