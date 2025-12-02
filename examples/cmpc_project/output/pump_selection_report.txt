@@ -1,0 +1,160 @@
+======================================================================
+CMPC HEAT RECOVERY SYSTEM - PUMP SELECTION REPORT
+======================================================================
+
+PROJECT INFORMATION
+----------------------------------------------------------------------
+Client: Papeles Cordillera S.A. (CMPC Puente Alto)
+System: Heat Recovery from Air Compressors
+Design Standard: ISO 9906 (Centrifugal Pump Performance)
+
+======================================================================
+SYSTEM HYDRAULIC REQUIREMENTS
+======================================================================
+
+Flow rates:
+  Design flow (80%):    21.72 m³/h
+  Maximum flow (2%):    32.93 m³/h
+
+Head requirements:
+  Static head:          5.29 m
+  TDH (design):         5.79 m
+  TDH (maximum):        6.79 m
+  TDH (design + 20%):   6.94 m
+
+======================================================================
+CONFIGURATION SELECTED: DISTRIBUTED INDIVIDUAL PUMPS
+======================================================================
+
+Rationale:
+  ✓ Operational flexibility (modular operation)
+  ✓ Built-in redundancy (system continues if one fails)
+  ✓ Energy efficiency (only pump active compressors)
+  ✓ Maintenance flexibility (service without full shutdown)
+  ✓ Scalability for future modifications
+
+======================================================================
+SELECTED PUMPS
+======================================================================
+
+1. Grundfos TPE3 D 10-60/4
+   Quantity:     3 units
+   Application:  Unit 1, Unit 2, Unit 3 (backup)
+   Rated flow:   10.0 m³/h
+   Rated head:   6.5 m
+   Motor power:  0.55 kW
+   Efficiency:   65.0%
+   NPSH req:     2.0 m
+
+2. Grundfos TPE3 D 6-50/4
+   Quantity:     2 units
+   Application:  Unit 4, Unit 5
+   Rated flow:   6.0 m³/h
+   Rated head:   5.5 m
+   Motor power:  0.37 kW
+   Efficiency:   62.0%
+   NPSH req:     1.8 m
+
+3. Grundfos TPE3 D 8-55/4
+   Quantity:     1 units
+   Application:  Unit 6
+   Rated flow:   8.0 m³/h
+   Rated head:   6.0 m
+   Motor power:  0.45 kW
+   Efficiency:   63.0%
+   NPSH req:     1.9 m
+
+======================================================================
+NPSH ANALYSIS
+======================================================================
+
+System type:          Closed loop with pressurized accumulator
+NPSH available:       26.07 m
+Cavitation risk:      None - adequate margin on all pumps
+
+======================================================================
+INSTALLATION REQUIREMENTS
+======================================================================
+
+Mounting:
+  - Install pumps directly on compressor frames
+  - Height: 2.36 m from floor (per layout)
+  - Use vibration isolators (rubber pads or springs)
+  - Ensure rigid baseplate for alignment
+
+Piping connections:
+  - Suction: From compressor heat exchanger outlet
+  - Discharge: To main header (DN variable per branch)
+  - Include isolation valves for maintenance
+  - Install pressure gauges at suction and discharge
+
+Electrical:
+  - Supply: 380V, 3-phase, 50 Hz
+  - Protection: Thermal overload, phase monitoring
+  - Control: Manual start/stop with compressor interlock
+  - Optional: VFD for energy optimization
+
+======================================================================
+OPERATING COST ANALYSIS
+======================================================================
+
+Total installed power: 2.29 kW (5 active pumps)
+Operating hours:       8000 h/year
+Electricity cost:      150 CLP/kWh
+Annual energy cost:    $2,748,000 CLP/year
+Monthly cost:          $229,000 CLP/month
+
+======================================================================
+MAINTENANCE SCHEDULE
+======================================================================
+
+Daily:
+  □ Visual inspection for leaks
+  □ Check operating temperatures
+  □ Verify pressure gauge readings
+
+Weekly:
+  □ Check vibration levels
+  □ Inspect mechanical seal (if visible)
+  □ Verify flow rates match expected
+
+Monthly:
+  □ Lubricate motor bearings (if required)
+  □ Check coupling alignment
+  □ Clean strainers
+
+Annually:
+  □ Complete performance test
+  □ Replace mechanical seals
+  □ Inspect impeller for wear
+  □ Megger test motor windings
+  □ Verify pressure relief valve operation
+
+======================================================================
+SPARE PARTS RECOMMENDATION
+======================================================================
+
+Critical spares (stock on-site):
+  - Mechanical seal kit (1 per pump model)
+  - Bearing set (1 per pump model)
+  - O-ring kit
+
+Recommended spares (6-month lead time):
+  - Complete impeller (1 per pump model)
+  - Motor (1 spare for most common size)
+
+======================================================================
+NEXT STEPS
+======================================================================
+
+[ ] Obtain formal quotations from Grundfos distributor
+[ ] Verify pump curves match system requirements
+[ ] Design accumulator tank (04_storage_design.py)
+[ ] Design intermediate heat exchanger (05_heat_exchanger.py)
+[ ] Prepare detailed installation drawings
+[ ] Develop commissioning procedure
+
+======================================================================
+Report generated by: Felipe Wasaff
+Script: 03_pump_selection.py
+======================================================================

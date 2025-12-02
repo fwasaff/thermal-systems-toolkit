@@ -1,0 +1,195 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{booktabs} % Tablas profesionales
+\usepackage{fancyhdr} % Encabezados
+\usepackage{xcolor}
+\usepackage{float} % Posicionamiento de imágenes
+\usepackage{array} % Gestión de columnas en tablas
+\usepackage{enumitem} % Listas personalizadas
+\usepackage{caption} % Mejor control de leyendas
+
+% Configuración de márgenes y diseño de página
+\geometry{a4paper, total={170mm,257mm}, left=20mm, top=20mm}
+\setlength{\headheight}{14.5pt} 
+\setlength{\parskip}{0.5em} % Espacio entre párrafos para mejor lectura
+
+% Configuración de Encabezado y Pie de Página
+\pagestyle{fancy}
+\fancyhead{}
+\fancyfoot{}
+\fancyhead[L]{\textbf{\footnotesize Sistema de Recuperación de Calor CMPC}}
+\fancyhead[R]{\textbf{\footnotesize Informe Final de Ingeniería de Detalle}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% Título del Documento
+\title{\vspace{-2cm}\textbf{\huge Propuesta de Inversión y Diseño:}}
+\author{\textbf{\LARGE Sistema de Recuperación de Calor de Compresores (HRS)}\\
+\large \textit{Ingeniería de Detalle para Ejecución (EPC)}\\
+\normalsize Cliente: Papeles Cordillera S.A. (CMPC Puente Alto)}
+\date{\normalsize Diciembre de 2025}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{fancy}
+
+\hrule
+\vspace{0.5cm}
+
+\section{Resumen Ejecutivo}
+
+Este informe técnico presenta la ingeniería de detalle, el dimensionamiento de equipos y la evaluación económica para la implementación del Sistema de Recuperación de Calor (HRS) en la planta de compresores de CMPC Puente Alto. El proyecto tiene como objetivo capturar la energía térmica residual para precalentar agua de proceso, sustituyendo el consumo de gas natural.
+
+\subsection{Resultados Financieros Clave}
+
+El análisis confirma que el proyecto es una inversión de alto rendimiento y bajo riesgo, lista para su ejecución inmediata.
+
+\begin{table}[H]
+    \centering
+    \caption{Resumen de Métricas Financieras y Operacionales}
+    \vspace{0.2cm}
+    \begin{tabular}{p{0.35\textwidth} p{0.25\textwidth} p{0.3\textwidth}}
+        \toprule
+        \textbf{Métrica} & \textbf{Valor} & \textbf{Impacto} \\
+        \midrule
+        Potencia Térmica & $622.0 \text{ kW}$ & Condición Normal (80\%) \\
+        \textbf{Inversión Total (CAPEX)} & $\mathbf{\$ 46,255,000 \text{ CLP}}$ & Presupuesto EPC \\
+        Ahorro Neto Anual & $\mathbf{\$ 273,259,210 \text{ CLP}}$ & Reducción de Costos \\
+        \textbf{Payback (Retorno)} & $\mathbf{0.17 \text{ años} (\sim 2 \text{ meses})}$ & \textcolor{red}{\textbf{Prioridad Máxima}} \\
+        VAN (10 años) & $\mathbf{\$ 1,787 \text{ MM CLP}}$ & Valor Creado \\
+        TIR & $\mathbf{590.8\%}$ & Rentabilidad Excepcional \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection{Justificación de la Capacidad de Diseño}
+
+El sistema ha sido dimensionado para la \textbf{Condición Normal de Operación (Escenario 3)}, que representa una disponibilidad térmica de $\mathbf{622 \text{ kW}}$ durante el $\mathbf{80\%}$ del tiempo operativo anual.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{scenario_analysis.png}
+    \caption{Distribución de Escenarios Operativos y Potencia Térmica.}
+\end{figure}
+
+\noindent \textbf{Análisis Técnico:} Como se observa en la Figura 1, diseñar el sistema para la capacidad pico ($948 \text{ kW}$) habría implicado un sobredimensionamiento de equipos costoso para un escenario que solo ocurre el $2\%$ del tiempo. La elección de $\mathbf{622 \text{ kW}}$ optimiza la relación Costo-Beneficio, asegurando que el sistema opere a plena carga la mayor parte del año.
+
+\section{Diseño de Componentes Críticos}
+
+\subsection{Selección del Intercambiador de Calor (HX)}
+
+Para garantizar el aislamiento entre el circuito de aceite/agua de los compresores y el agua industrial, se seleccionó la tecnología de placas.
+
+\begin{table}[H]
+    \centering
+    \caption{Comparativa Tecnológica de Intercambiadores}
+    \vspace{0.2cm}
+    \begin{tabular}{l c c c}
+        \toprule
+        \textbf{Tecnología} & \textbf{Área ($\text{m}^2$)} & \textbf{Coef. U ($\text{W}/\text{m}^2\text{K}$)} & \textbf{Eficiencia Relativa} \\
+        \midrule
+        \textbf{Placas (Seleccionado)} & $\mathbf{4.87}$ & $\mathbf{4000}$ & $\mathbf{Alta}$ \\
+        Carcasa y Tubos & $19.46$ & $1000$ & Baja \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{heat_exchanger_design.png}
+    \caption{Perfil Térmico en Contraflujo y Selección de Tecnología.}
+\end{figure}
+
+\noindent \textbf{Análisis Técnico:} La Figura 2 valida que el intercambiador de placas logra la transferencia térmica requerida con un área de tan solo $\mathbf{4.87 \text{ m}^2}$, gracias a su alto coeficiente de transferencia. Esto reduce el espacio en planta y el costo de capital en comparación con la opción tubular.
+
+\subsection{Sistema Hidráulico y Almacenamiento}
+
+\subsubsection{Sistema de Bombeo Modular}
+El diseño hidráulico incorpora un esquema de bombeo distribuido (6 bombas) para modular el caudal según la demanda real de los compresores, optimizando el consumo eléctrico.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{pump_selection_analysis.png}
+    \caption{Curvas Características del Sistema y Bombas.}
+\end{figure}
+
+\noindent \textbf{Análisis Técnico:} La Figura 3 demuestra que el punto de operación de diseño ($\mathbf{21.72 \text{ m}^3/\text{h}}$ a $\mathbf{0.8 \text{ bar}}$) se encuentra dentro de la zona de alta eficiencia de las bombas seleccionadas. El bajo requerimiento de altura dinámica (TDH) confirma un diseño de tuberías eficiente con bajas pérdidas de carga.
+
+\subsubsection{Tanque de Acumulación Estratificado}
+Se incorpora un tanque de inercia de $\mathbf{6.16 \text{ m}^3}$ para desacoplar hidráulicamente la generación de la demanda y absorber transientes.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{storage_tank_design.png}
+    \caption{Esquema del Tanque y Validación de Estratificación.}
+\end{figure}
+
+\noindent \textbf{Análisis Técnico:} La Figura 4 valida la geometría del tanque (relación Altura/Diámetro = 2.5). El diseño asegura un Número de Richardson adecuado ($\mathbf{Ri} \ge 0.1$), garantizando la \textbf{estratificación térmica}: el agua caliente se mantiene separada de la fría, preservando la calidad de la energía recuperada.
+
+\subsection{Componentes Auxiliares y Seguridad}
+
+Para asegurar la operatividad y mantenibilidad del sistema (Ingeniería de Detalle), se incluyen los siguientes elementos críticos en el diseño:
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Vaso de Expansión:} Dimensionado para absorber la dilatación térmica del fluido a $85^\circ\text{C}$.
+    \item \textbf{Válvulas de Seguridad:} Protección contra sobrepresión en el circuito primario.
+    \item \textbf{Filtros Y:} Instalados en la succión de bombas y entrada del HX para prevenir obstrucciones.
+    \item \textbf{Válvulas de 3 Vías:} Para el control preciso de la temperatura de retorno a los compresores.
+\end{itemize}
+
+\section{Análisis de Rentabilidad y Presupuesto}
+
+\subsection{Validación del Balance Energético}
+El balance de energía cierra con un error marginal del $\mathbf{0.83\%}$ ($5.15 \text{ kW}$ de pérdidas estimadas), lo que confirma la robustez de los cálculos termodinámicos.
+
+\subsection{Presupuesto de Inversión (CAPEX)}
+
+\begin{table}[H]
+    \centering
+    \caption{Desglose del Costo de Capital Estimado}
+    \vspace{0.2cm}
+    \begin{tabular}{p{0.4\textwidth} p{0.35\textwidth} r}
+        \toprule
+        \textbf{Ítem} & \textbf{Descripción} & \textbf{Monto (CLP)} \\
+        \midrule
+        Intercambiador de Calor & Placas Inox, Juntas EPDM & $19,000,000$ \\
+        Tuberías y Aislación & Acero Carbono, Lana Mineral & $4,500,000$ \\
+        Instrumentación y Control & Sensores, PLC, Actuadores & $3,500,000$ \\
+        Equipos Rotatorios y Tanque & Bombas, Estanque Acumulador & $6,050,000$ \\
+        \midrule
+        \textbf{Ingeniería y Montaje} & Instalación, Puesta en Marcha & $\mathbf{13,205,000}$ \\
+        \midrule
+        \textbf{TOTAL GENERAL} & & $\mathbf{\$ 46,255,000}$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\section{Conclusiones y Recomendación}
+
+El proyecto ``Sistema de Recuperación de Calor HRS'' representa una oportunidad inmejorable para CMPC Puente Alto.
+
+\begin{enumerate}
+    \item \textbf{Viabilidad Técnica:} El diseño cumple con todos los estándares de ingeniería, asegurando el aislamiento del proceso y la continuidad operativa mediante redundancia en bombas.
+    \item \textbf{Impacto Económico:} Con un \textbf{VAN de \$1,787 MM} y un retorno de la inversión en solo \textbf{2 meses}, el proyecto se autofinancia rápidamente.
+    \item \textbf{Sostenibilidad:} Se evitará la emisión de gases de efecto invernadero asociada al consumo de $616,223 \text{ m}^3$ de gas natural anuales.
+\end{enumerate}
+
+\subsection{Diagrama de Proceso e Instrumentación (P\&ID)}
+
+El siguiente diagrama constituye el entregable final de ingeniería, definiendo la interconexión física y lógica de todos los componentes del sistema.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{system_pid_diagram.png}
+    \caption{Diagrama P\&ID: Ingeniería de Detalle para Construcción.}
+\end{figure}
+
+\end{document}

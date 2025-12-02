@@ -1,0 +1,198 @@
+================================================================================
+CMPC HEAT RECOVERY SYSTEM - COMPLETE PROJECT REPORT
+================================================================================
+
+EXECUTIVE SUMMARY
+--------------------------------------------------------------------------------
+
+Client:              Papeles Cordillera S.A. (CMPC Puente Alto)
+Location:            Región Metropolitana, Puente Alto, Chile
+Project:             Compressor Heat Recovery System
+Engineer:            Felipe Wasaff
+Company:             Leycero SpA (Consultant)
+Date:                2025-12-02
+
+Project Scope:
+Design complete heat recovery system to capture waste heat from 6 industrial
+air compressors and deliver it to industrial water system for process heating.
+
+Key Performance Indicators:
+  • Heat recovered:        622 kW (design)
+  • System efficiency:     100.0%
+  • Annual energy saved:   4,976 MWh/year
+  • CO2 avoided:           1,232 ton/year
+  • Investment required:   $46,255,000 CLP
+  • Simple payback:        2 months
+  • NPV (10 years):        $1,787,336,539 CLP
+  • IRR:                   590.8%
+
+================================================================================
+TECHNICAL SPECIFICATIONS
+================================================================================
+
+1. HEAT SOURCES
+--------------------------------------------------------------------------------
+   Configuration:        6 air compressors
+   Total capacity:       948 kW
+   Design power:         622 kW
+
+   Unit 1: FSD 575      246 kW
+   Unit 2: FSD 575      246 kW
+   Unit 3: FSD 575      246 kW (BACKUP)
+   Unit 4: DSDX 305     130 kW
+   Unit 5: DSDX 305     130 kW
+   Unit 6: ESD 445      196 kW
+
+2. PIPING NETWORK
+--------------------------------------------------------------------------------
+   Material:             Carbon Steel ASTM A53 Schedule 40
+   Insulation:           50mm mineral wool + aluminum jacket
+   Main header:          DN80
+   Total length:         ~80 m
+   Pressure drop:        15.2 kPa
+
+3. CIRCULATION PUMPS
+--------------------------------------------------------------------------------
+   Configuration:        Distributed (one per compressor)
+   Total units:          6 (5 active)
+   Manufacturer:         Grundfos
+   Total power:          2.18 kW
+   Design head:          7.1 m
+
+   TPE3 D 10-60/4       × 3  (0.55 kW each)
+   TPE3 D 6-50/4        × 2  (0.37 kW each)
+   TPE3 D 8-55/4        × 1  (0.45 kW each)
+
+4. THERMAL STORAGE TANK
+--------------------------------------------------------------------------------
+   Type:                 Vertical cylindrical tank
+   Volume:               1.64 m³
+   Dimensions:           920 mm Ø × 2450 mm H
+   Storage time:         15 minutes
+   Energy capacity:      11.4 MJ
+   Material:             Carbon Steel ASTM A36
+   Insulation:           75mm mineral wool + aluminum jacket
+   Heat loss:            146 W
+   Stratification (Ri):  26.7 (excellent)
+
+5. HEAT EXCHANGER
+--------------------------------------------------------------------------------
+   Type:                 Plate heat exchanger (gasketed)
+   Manufacturer:         Alfa Laval
+   Model:                CB30
+   Configuration:        12 plates
+   Area:                 3.6 m²
+   Duty:                 622 kW
+   U coefficient:        4200 W/(m²·K)
+   Effectiveness:        78.6%
+   Material:             Stainless Steel 316
+
+================================================================================
+FINANCIAL ANALYSIS
+================================================================================
+
+INVESTMENT:
+  Total CAPEX:           $     46,255,000 CLP
+
+ANNUAL BENEFITS:
+  Energy savings:        $    277,300,310 CLP/year
+  Operating costs:       $      4,041,100 CLP/year
+  --------------------------------------------------------------------------------
+  Net benefit:           $    273,259,210 CLP/year
+
+RETURN ON INVESTMENT:
+  Simple payback:        0.17 years (2 months)
+  NPV (10 years, 8%):    $  1,787,336,539 CLP
+  IRR:                   590.8%
+
+ENVIRONMENTAL IMPACT:
+  CO2 emissions avoided: 1,232 ton CO2/year
+
+================================================================================
+OPERATING PROCEDURES
+================================================================================
+
+STARTUP SEQUENCE:
+  1. Verify all isolation valves are in correct position
+  2. Check thermal storage tank level (should be >80%)
+  3. Start circulation pump for first active compressor
+  4. Verify flow and pressure readings normal
+  5. Start additional pumps as compressors activate
+  6. Monitor temperatures reach steady state (15-20 min)
+  7. Verify heat exchanger ΔT matches design
+  8. Check for leaks at all connections
+
+NORMAL OPERATION:
+  1. Monitor compressor operating status
+  2. Activate/deactivate pumps with compressor status
+  3. Maintain storage tank temperature 40-65°C
+  4. Monitor heat exchanger approach temperature
+  5. Check pressure drops within design limits
+  6. Record temperatures hourly in log
+  7. Verify stratification in storage tank maintained
+
+SHUTDOWN PROCEDURE:
+  1. Stop industrial water flow through heat exchanger
+  2. Allow circulation pumps to run 5 minutes
+  3. Stop circulation pumps in reverse order of startup
+  4. Close isolation valves
+  5. For extended shutdown: drain system if freezing risk
+  6. Record final temperatures and pressures
+
+================================================================================
+RECOMMENDATIONS
+================================================================================
+
+1. IMPLEMENTATION PRIORITY: HIGH
+   - Excellent payback period (< 3 years)
+   - Proven technology with low risk
+   - Significant environmental benefits
+
+2. PHASED IMPLEMENTATION:
+   Phase 1: Install 3 pumps on units 1, 2, 4 (minimum viable system)
+   Phase 2: Complete installation with remaining pumps
+   Phase 3: Add VFDs for energy optimization (optional)
+
+3. MONITORING & OPTIMIZATION:
+   - Install energy meter on heat exchanger
+   - Track actual savings vs. projections
+   - Optimize control strategy based on real operation
+
+4. MAINTENANCE:
+   - Establish preventive maintenance schedule
+   - Train operators on system operation
+   - Keep spare parts inventory
+
+================================================================================
+CONCLUSIONS
+================================================================================
+
+The designed heat recovery system represents an excellent investment for
+CMPC Puente Alto facility:
+
+TECHNICAL FEASIBILITY:
+  ✓ All components are standard, proven technology
+  ✓ System can be installed with minimal downtime
+  ✓ Compatible with existing infrastructure
+  ✓ Modular design allows phased implementation
+
+ECONOMIC VIABILITY:
+  ✓ Payback in 2 months is excellent
+  ✓ NPV of $1787.3M CLP demonstrates strong value
+  ✓ IRR of 590.8% far exceeds typical hurdle rates
+  ✓ Low operating costs ensure sustained benefits
+
+ENVIRONMENTAL BENEFITS:
+  ✓ Avoids 1,232 ton CO2/year
+  ✓ Reduces natural gas consumption
+  ✓ Supports corporate sustainability goals
+
+RECOMMENDATION: PROCEED WITH IMPLEMENTATION
+
+================================================================================
+END OF REPORT
+================================================================================
+
+Report generated: 2025-12-02 10:43
+Engineer: Felipe Wasaff
+Company: Leycero SpA (Consultant)
