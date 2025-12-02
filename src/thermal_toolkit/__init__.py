@@ -10,7 +10,7 @@ Modules
 - fluid_flow: Fluid mechanics and pipe design
 - pumps: Pump selection and sizing
 - storage_tanks: Thermal storage tank design
-- heat_exchangers: Heat exchanger design (coming soon)
+- heat_exchangers: Heat exchanger design and analysis
 
 Author: Felipe Wasaff
 Email: felipe.wasaff@uchile.cl
@@ -24,5 +24,6 @@ from . import heat_transfer
 from . import fluid_flow
 from . import pumps
 from . import storage_tanks
+from . import heat_exchangers
 
-__all__ = ['heat_transfer', 'fluid_flow', 'pumps', 'storage_tanks']
+__all__ = ['heat_transfer', 'fluid_flow', 'pumps', 'storage_tanks', 'heat_exchangers']
