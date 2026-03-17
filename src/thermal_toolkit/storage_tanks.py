@@ -445,17 +445,22 @@ def thermal_losses(
     -----
     Q_loss = U·A·ΔT
     """
+    if surface_area <= 0:
+        raise ValueError(f"Surface area must be positive, got {surface_area} m²")
+    if U <= 0:
+        raise ValueError(f"U coefficient must be positive, got {U} W/(m²·K)")
+    if tank_temperature <= ambient_temperature:
+        raise ValueError(
+            f"Tank temperature ({tank_temperature}°C) must be greater than "
+            f"ambient temperature ({ambient_temperature}°C)"
+        )
+
     delta_T = tank_temperature - ambient_temperature
     Q_loss_W = U * surface_area * delta_T
-    
+
     # Daily losses
     Q_loss_daily_kWh = (Q_loss_W * 24) / 1000
-    
-    # Percentage of stored energy
-    # Assume typical 5 m³ tank with 20K delta T
-    stored_energy_kWh = (5 * WATER_RHO * WATER_CP * 20) / 3.6e6
-    loss_percentage = (Q_loss_daily_kWh / stored_energy_kWh) * 100
-    
+
     return {
         'heat_loss_W': Q_loss_W,
         'heat_loss_kW': Q_loss_W / 1000,

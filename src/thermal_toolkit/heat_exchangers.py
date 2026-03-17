@@ -90,7 +90,7 @@ def lmtd_counterflow(T_hot_in: float, T_hot_out: float, T_cold_in: float, T_cold
 def required_area_lmtd(Q: float, U: float, LMTD: float, F: float = 1.0) -> float:
     """
     Calculate required heat transfer area using LMTD method.
-    
+
     Parameters
     ----------
     Q : float
@@ -100,18 +100,26 @@ def required_area_lmtd(Q: float, U: float, LMTD: float, F: float = 1.0) -> float
     LMTD : float
         Log mean temperature difference [K]
     F : float, optional
-        Correction factor (1.0 for counterflow)
-    
+        Correction factor (1.0 for counterflow, 0.7–0.9 for shell-tube multi-pass)
+
     Returns
     -------
     float
         Required area [m²]
-    
+
     Notes
     -----
     From Q = U·A·LMTD·F:
     A = Q / (U·LMTD·F)
     """
+    if Q < 0:
+        raise ValueError(f"Heat duty Q must be non-negative, got {Q} W")
+    if U <= 0:
+        raise ValueError(f"U coefficient must be positive, got {U} W/(m²·K)")
+    if LMTD <= 0:
+        raise ValueError(f"LMTD must be positive, got {LMTD} K")
+    if not 0 < F <= 1.0:
+        raise ValueError(f"Correction factor F must be in (0, 1], got {F}")
     A = Q / (U * LMTD * F)
     return A
 
@@ -280,9 +288,27 @@ def plate_heat_exchanger_design(Q: float, m_hot: float, m_cold: float, T_hot_in:
     dict
         Design parameters
     """
+    # Input validation
+    if Q <= 0:
+        raise ValueError(f"Heat duty Q must be positive, got {Q} W")
+    if m_hot <= 0:
+        raise ValueError(f"Hot mass flow must be positive, got {m_hot} kg/s")
+    if m_cold <= 0:
+        raise ValueError(f"Cold mass flow must be positive, got {m_cold} kg/s")
+    if T_hot_in <= T_hot_out:
+        raise ValueError(
+            f"Hot side must cool: T_hot_in ({T_hot_in}°C) must be > T_hot_out ({T_hot_out}°C)"
+        )
+    if T_cold_out <= T_cold_in:
+        raise ValueError(
+            f"Cold side must heat: T_cold_out ({T_cold_out}°C) must be > T_cold_in ({T_cold_in}°C)"
+        )
+    if U_estimated <= 0:
+        raise ValueError(f"U_estimated must be positive, got {U_estimated} W/(m²·K)")
+
     # Calculate LMTD
     LMTD = lmtd_counterflow(T_hot_in, T_hot_out, T_cold_in, T_cold_out)
-    
+
     # Calculate required area
     A_required = required_area_lmtd(Q, U_estimated, LMTD)
     
@@ -329,9 +355,27 @@ def plate_heat_exchanger_design(Q: float, m_hot: float, m_cold: float, T_hot_in:
 def shell_tube_heat_exchanger_design(Q: float, m_hot: float, m_cold: float, T_hot_in: float, T_hot_out: float, T_cold_in: float, T_cold_out: float, U_estimated: float = 1000.0) -> Dict:
     """
     Design shell-and-tube heat exchanger.
-    
+
     Similar to plate design but with different U coefficient.
     """
+    # Input validation
+    if Q <= 0:
+        raise ValueError(f"Heat duty Q must be positive, got {Q} W")
+    if m_hot <= 0:
+        raise ValueError(f"Hot mass flow must be positive, got {m_hot} kg/s")
+    if m_cold <= 0:
+        raise ValueError(f"Cold mass flow must be positive, got {m_cold} kg/s")
+    if T_hot_in <= T_hot_out:
+        raise ValueError(
+            f"Hot side must cool: T_hot_in ({T_hot_in}°C) must be > T_hot_out ({T_hot_out}°C)"
+        )
+    if T_cold_out <= T_cold_in:
+        raise ValueError(
+            f"Cold side must heat: T_cold_out ({T_cold_out}°C) must be > T_cold_in ({T_cold_in}°C)"
+        )
+    if U_estimated <= 0:
+        raise ValueError(f"U_estimated must be positive, got {U_estimated} W/(m²·K)")
+
     LMTD = lmtd_counterflow(T_hot_in, T_hot_out, T_cold_in, T_cold_out)
     A_required = required_area_lmtd(Q, U_estimated, LMTD)
     
@@ -477,35 +521,68 @@ COMMERCIAL_PLATE_HX = {
 }
 
 
-def select_commercial_plate_hx(area_required: float, heat_duty_kW: float) -> Dict:
+def select_commercial_plate_hx(
+    area_required: float,
+    heat_duty_kW: float,
+    LMTD: float
+) -> Dict:
     """
-    Select commercial plate heat exchanger.
-    
+    Select commercial plate heat exchanger and verify actual thermal capacity.
+
     Parameters
     ----------
     area_required : float
-        Required heat transfer area [m²]
+        Required heat transfer area [m²] (calculated at design U)
     heat_duty_kW : float
-        Heat duty [kW]
-    
+        Required heat duty [kW]
+    LMTD : float
+        Log mean temperature difference [K] used for thermal verification
+
     Returns
     -------
     dict
-        Selected unit specification
+        Selected unit specification with thermal capacity verification,
+        or None if no suitable model found.
+
+    Notes
+    -----
+    Thermal verification uses Q_actual = U_typical × A_total × LMTD
+    with the catalog U coefficient (not the design U), ensuring the
+    selected unit actually meets the required duty.
     """
+    if area_required <= 0:
+        raise ValueError(f"area_required must be positive, got {area_required} m²")
+    if heat_duty_kW <= 0:
+        raise ValueError(f"heat_duty_kW must be positive, got {heat_duty_kW} kW")
+    if LMTD <= 0:
+        raise ValueError(f"LMTD must be positive, got {LMTD} K")
+
     for model_name, specs in COMMERCIAL_PLATE_HX.items():
         num_plates = int(np.ceil(area_required / specs['plate_area_m2']))
-        
+
         if num_plates % 2 != 0:
             num_plates += 1
-        
-        if num_plates <= specs['max_plates'] and heat_duty_kW <= specs['max_heat_duty_kW']:
+
+        total_area = num_plates * specs['plate_area_m2']
+
+        # Verify actual thermal capacity with catalog U coefficient
+        Q_actual_kW = (specs['U_typical'] * total_area * LMTD) / 1000
+
+        geometric_ok = num_plates <= specs['max_plates']
+        duty_catalog_ok = heat_duty_kW <= specs['max_heat_duty_kW']
+        thermal_ok = Q_actual_kW >= heat_duty_kW
+
+        if geometric_ok and duty_catalog_ok and thermal_ok:
             return {
                 'model': model_name,
                 'specs': specs,
                 'num_plates': num_plates,
-                'total_area_m2': num_plates * specs['plate_area_m2'],
-                'oversizing_factor': (num_plates * specs['plate_area_m2']) / area_required
+                'total_area_m2': total_area,
+                'geometric_oversizing_factor': total_area / area_required,
+                'Q_actual_kW': round(Q_actual_kW, 1),
+                'Q_required_kW': heat_duty_kW,
+                'thermal_margin_kW': round(Q_actual_kW - heat_duty_kW, 1),
+                'thermal_margin_pct': round((Q_actual_kW - heat_duty_kW) / heat_duty_kW * 100, 1),
             }
-    
+
     return None

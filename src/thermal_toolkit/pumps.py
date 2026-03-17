@@ -350,6 +350,13 @@ def pump_power(
     Shaft power:     P_s = P_h / η_pump
     Motor power:     P_m = P_s / η_motor (typically η_motor ≈ 0.9)
     """
+    if flow <= 0:
+        raise ValueError(f"Flow rate must be positive, got {flow} m³/h")
+    if head <= 0:
+        raise ValueError(f"Head must be positive, got {head} m")
+    if not 0 < efficiency <= 100:
+        raise ValueError(f"Efficiency must be in (0, 100]%, got {efficiency}%")
+
     # Convert flow to m³/s
     Q_m3s = flow / 3600
     
@@ -408,10 +415,22 @@ def npsh_available(
     Notes
     -----
     NPSH_a = (P_atm - P_vapor)/(ρ·g) + H_static - H_friction_suction
-    
+
     For closed loop systems (like CMPC):
     NPSH_a is typically very high since system is pressurized
     """
+    if atmospheric_pressure <= 0:
+        raise ValueError(f"Atmospheric pressure must be positive, got {atmospheric_pressure} Pa")
+    if vapor_pressure < 0:
+        raise ValueError(f"Vapor pressure must be non-negative, got {vapor_pressure} Pa")
+    if atmospheric_pressure <= vapor_pressure:
+        raise ValueError(
+            f"Atmospheric pressure ({atmospheric_pressure} Pa) must be greater than "
+            f"vapor pressure ({vapor_pressure} Pa)"
+        )
+    if suction_friction_loss < 0:
+        raise ValueError(f"Suction friction loss must be non-negative, got {suction_friction_loss} m")
+
     pressure_head = (atmospheric_pressure - vapor_pressure) / (rho * GRAVITY)
     npsh_a = pressure_head + static_suction_head - suction_friction_loss
     
@@ -480,6 +499,15 @@ def energy_cost_annual(
     dict
         Energy consumption and cost analysis
     """
+    if power_kW <= 0:
+        raise ValueError(f"Power must be positive, got {power_kW} kW")
+    if operating_hours_per_year <= 0 or operating_hours_per_year > 8760:
+        raise ValueError(
+            f"Operating hours must be in (0, 8760] h/year, got {operating_hours_per_year}"
+        )
+    if electricity_cost_per_kWh <= 0:
+        raise ValueError(f"Electricity cost must be positive, got {electricity_cost_per_kWh}")
+
     annual_energy_kWh = power_kW * operating_hours_per_year
     annual_cost = annual_energy_kWh * electricity_cost_per_kWh
     

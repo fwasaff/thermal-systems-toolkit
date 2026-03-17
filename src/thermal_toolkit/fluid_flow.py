@@ -38,6 +38,26 @@ PIPE_ROUGHNESS = {
 # Standard pipe sizes (DN - Nominal Diameter) [mm]
 STANDARD_DN = [15, 20, 25, 32, 40, 50, 65, 80, 100, 125, 150, 200, 250, 300]
 
+# ASME B36.10M Schedule 40 pipe dimensions
+# Key: DN [mm] → {OD_mm: outer diameter, wall_mm: wall thickness}
+# Source: ASME B36.10M-2015, Table 1
+SCHEDULE_40_DIMENSIONS = {
+    15:  {'OD_mm': 21.3,  'wall_mm': 2.77},
+    20:  {'OD_mm': 26.7,  'wall_mm': 2.87},
+    25:  {'OD_mm': 33.4,  'wall_mm': 3.38},
+    32:  {'OD_mm': 42.2,  'wall_mm': 3.56},
+    40:  {'OD_mm': 48.3,  'wall_mm': 3.68},
+    50:  {'OD_mm': 60.3,  'wall_mm': 3.91},
+    65:  {'OD_mm': 73.0,  'wall_mm': 5.16},
+    80:  {'OD_mm': 88.9,  'wall_mm': 5.49},
+    100: {'OD_mm': 114.3, 'wall_mm': 6.02},
+    125: {'OD_mm': 141.3, 'wall_mm': 6.55},
+    150: {'OD_mm': 168.3, 'wall_mm': 7.11},
+    200: {'OD_mm': 219.1, 'wall_mm': 8.18},
+    250: {'OD_mm': 273.1, 'wall_mm': 9.27},
+    300: {'OD_mm': 323.9, 'wall_mm': 9.53},
+}
+
 
 def reynolds_number(
     velocity: float,
@@ -195,24 +215,33 @@ def friction_factor(
     Automatically selects appropriate equation based on Reynolds number:
     - Re < 2300: Laminar (f = 64/Re)
     - Re > 4000: Turbulent (Swamee-Jain or Colebrook-White)
-    - 2300 < Re < 4000: Transitional (linear interpolation)
+    - 2300 ≤ Re ≤ 4000: Transitional — behavior is unstable and unpredictable.
+      Colebrook-White evaluated at Re=4000 is used as a conservative upper bound.
+      Design should avoid this regime by adjusting pipe diameter or flow rate.
     """
     if Re < 2300:
         # Laminar flow
         return friction_factor_laminar(Re)
-    
+
     elif Re > 4000:
         # Turbulent flow
         return friction_factor_turbulent(Re, roughness, diameter, method)
-    
+
     else:
-        # Transitional flow (linear interpolation)
-        f_lam = friction_factor_laminar(2300)
-        f_turb = friction_factor_turbulent(4000, roughness, diameter, method)
-        
-        # Linear interpolation
-        f = f_lam + (f_turb - f_lam) * (Re - 2300) / (4000 - 2300)
-        return f
+        # Transitional regime (2300 ≤ Re ≤ 4000):
+        # Friction factor is physically indeterminate in this range.
+        # Linear interpolation is thermodynamically invalid here.
+        # Conservative approach: use Colebrook-White at Re=4000 (maximum turbulent f),
+        # which gives the highest friction factor and therefore the safest design.
+        warnings.warn(
+            f"Reynolds number Re={Re:.0f} falls in the transitional regime (2300–4000). "
+            "Friction factor in this range is physically unstable and difficult to predict. "
+            "Using Colebrook-White at Re=4000 (conservative upper bound). "
+            "Recommended: resize pipe to achieve Re < 2300 or Re > 4000.",
+            UserWarning,
+            stacklevel=2
+        )
+        return friction_factor_turbulent(4000, roughness, diameter, 'colebrook-white')
 
 
 def pressure_drop_darcy_weisbach(
@@ -491,32 +520,36 @@ def select_standard_pipe(
     
     Notes
     -----
-    This is a simplified function. In practice, use ASME B36.10M tables.
-    
-    For Schedule 40 (most common):
-    D_internal ≈ DN - 2·wall_thickness
+    Uses ASME B36.10M-2015 Schedule 40 dimensions for accurate internal
+    diameters. The internal diameter is D_internal = OD - 2·wall_thickness.
+
+    Returns
+    -------
+    DN : int
+        Nominal diameter [mm]
+    D_internal : float
+        Actual internal diameter [m] per ASME B36.10M
+    D_external : float
+        Actual external (outer) diameter [m] per ASME B36.10M
     """
     # Convert to mm
     D_calc_mm = diameter_calculated * 1000
-    
-    # Find nearest standard DN
+
+    # Find nearest standard DN (select the first size where OD ≥ calculated)
+    # to ensure the internal diameter is always adequate
     DN = min(STANDARD_DN, key=lambda x: abs(x - D_calc_mm))
-    
-    # Approximate internal diameter for Schedule 40
-    # (simplified - use actual tables for precision)
+
     if schedule == 'schedule_40':
-        # Approximate formula: D_internal = DN - 2·wall_thickness
-        # Wall thickness varies with DN (simplified approximation)
-        if DN <= 50:
-            wall_thickness = 3.0  # mm
-        elif DN <= 100:
-            wall_thickness = 4.0  # mm
-        else:
-            wall_thickness = 6.0  # mm
-        
-        D_internal = (DN - 2 * wall_thickness) / 1000  # Convert to m
-        D_external = DN / 1000
-    
+        if DN not in SCHEDULE_40_DIMENSIONS:
+            raise ValueError(f"DN {DN} not found in ASME B36.10M Schedule 40 table")
+        dims = SCHEDULE_40_DIMENSIONS[DN]
+        OD_mm = dims['OD_mm']
+        wall_mm = dims['wall_mm']
+        D_internal = (OD_mm - 2 * wall_mm) / 1000   # m
+        D_external = OD_mm / 1000                    # m
+    else:
+        raise ValueError(f"Schedule '{schedule}' not supported. Use 'schedule_40'.")
+
     return DN, D_internal, D_external
 
 
