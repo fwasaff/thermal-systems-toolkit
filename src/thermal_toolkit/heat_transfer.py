@@ -161,15 +161,30 @@ def lmtd(
     ----------
     Incropera et al., "Fundamentals of Heat and Mass Transfer", 7th ed.
     """
-    dT1 = T_hot_in - T_cold_out
-    dT2 = T_hot_out - T_cold_in
-    
-    if abs(dT1 - dT2) < 1e-6:  # Avoid division by zero
-        return dT1
-    
+    # Validate physical temperature arrangement first
+    if T_hot_in <= T_hot_out:
+        raise ValueError(
+            f"Hot side must cool down: T_hot_in ({T_hot_in}°C) must be > T_hot_out ({T_hot_out}°C)"
+        )
+    if T_cold_out <= T_cold_in:
+        raise ValueError(
+            f"Cold side must heat up: T_cold_out ({T_cold_out}°C) must be > T_cold_in ({T_cold_in}°C)"
+        )
+
+    dT1 = T_hot_in - T_cold_out   # Hot inlet vs cold outlet (counterflow)
+    dT2 = T_hot_out - T_cold_in   # Hot outlet vs cold inlet (counterflow)
+
     if dT1 <= 0 or dT2 <= 0:
-        raise ValueError("Temperature differences must be positive for valid LMTD calculation")
-    
+        raise ValueError(
+            "Temperature cross-over detected: counterflow LMTD requires "
+            f"T_hot_in > T_cold_out (got ΔT₁={dT1:.2f} K) and "
+            f"T_hot_out > T_cold_in (got ΔT₂={dT2:.2f} K). "
+            "Check fluid arrangement or temperature values."
+        )
+
+    if abs(dT1 - dT2) < 1e-6:  # Avoid ln(1)=0 division; limit is dT1 = dT2
+        return dT1
+
     return (dT1 - dT2) / np.log(dT1 / dT2)
 
 
@@ -246,6 +261,10 @@ def thermal_resistance(
     -----
     R_thermal = 1 / (U·A)
     """
+    if area <= 0:
+        raise ValueError(f"Area must be positive, got {area} m²")
+    if U <= 0:
+        raise ValueError(f"U coefficient must be positive, got {U} W/(m²·K)")
     return 1.0 / (U * area)
 
 
