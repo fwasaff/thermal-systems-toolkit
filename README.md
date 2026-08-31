@@ -50,6 +50,28 @@ the flow field itself — not just the pressure drop — matters. That's what
 the CFD/FEM work in the rest of my [portfolio](https://github.com/fwasaff)
 is for.
 
+## Temperature-dependent fluid properties (optional)
+
+By default, every calculation uses fixed water properties (`WATER_RHO`,
+`WATER_MU` in `fluid_flow.py`), valid near 20°C. A real heat recovery loop
+moves fluid across a much wider range — water's viscosity alone drops
+more than 4x between 10°C and 95°C, which feeds directly into Reynolds
+number and friction factor. For a point in the system where that matters,
+pass `temperature_celsius` and properties are looked up from
+[CoolProp](http://www.coolprop.org/) instead:
+
+```python
+from thermal_toolkit.fluid_flow import pipe_design_summary
+
+d_cold = pipe_design_summary(flow, length, fittings, temperature_celsius=20.0)
+d_hot  = pipe_design_summary(flow, length, fittings, temperature_celsius=85.0)
+# same pipe, same flow rate -- different pressure drop, purely from viscosity
+```
+
+Requires `pip install CoolProp` (already in `requirements.txt`). Omit
+`temperature_celsius` to keep the original fixed-property behavior with
+no new dependency — every function still defaults to `WATER_RHO`/`WATER_MU`.
+
 ## Verification
 
 `tests/test_verification.py` checks the physics, not just that the code

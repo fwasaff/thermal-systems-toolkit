@@ -558,11 +558,12 @@ def pipe_design_summary(
     length: float,
     fittings: Dict[str, int],
     material: str = 'commercial_steel',
-    v_target: float = 2.0
+    v_target: float = 2.0,
+    temperature_celsius: float = None,
 ) -> Dict:
     """
     Complete pipe design calculation.
-    
+
     Parameters
     ----------
     flow_rate_m3h : float
@@ -575,53 +576,77 @@ def pipe_design_summary(
         Pipe material (for roughness)
     v_target : float, optional
         Target velocity [m/s]
-    
+    temperature_celsius : float, optional
+        Fluid temperature [degC]. If given, density and viscosity are
+        looked up from CoolProp at that temperature instead of using the
+        fixed WATER_RHO/WATER_MU constants (valid near 20 degC). Matters
+        for a heat recovery system, where different points in the loop
+        can be tens of degrees apart -- water's viscosity alone changes
+        by more than 4x between 10 degC and 95 degC, which feeds directly
+        into Reynolds number and friction factor. Requires the optional
+        CoolProp dependency (pip install CoolProp); omit this argument to
+        keep using the fixed-property behavior with no new dependency.
+
     Returns
     -------
     dict
-        Complete design summary
-    
+        Complete design summary. Includes 'fluid_T_celsius', 'fluid_rho',
+        'fluid_mu' so it's traceable which properties were actually used.
+
     Examples
     --------
-    >>> # Design pipe for an industrial air compressor
+    >>> # Design pipe for an industrial air compressor, water at 20 degC
     >>> flow = 8.61  # m³/h
     >>> length = 10.0  # m
     >>> fittings = {'90_elbow': 3, 'gate_valve_open': 1}
     >>> design = pipe_design_summary(flow, length, fittings)
     >>> print(f"DN: {design['DN']}")
     >>> print(f"Pressure drop: {design['pressure_drop_total_kPa']:.2f} kPa")
+
+    >>> # Same pipe, but for the hot side of the loop at 85 degC -- lower
+    >>> # viscosity means a different friction factor and pressure drop,
+    >>> # even for the identical pipe/flow rate.
+    >>> design_hot = pipe_design_summary(flow, length, fittings,
+    ...                                  temperature_celsius=85.0)
     """
+    if temperature_celsius is not None:
+        from .fluid_properties import water_properties
+        props = water_properties(temperature_celsius)
+        rho, mu = props.rho, props.mu
+    else:
+        rho, mu = WATER_RHO, WATER_MU
+
     # Convert flow rate to m³/s
     Q = flow_rate_m3h / 3600
-    
+
     # Calculate optimal diameter
     D_calc, v_calc = optimal_pipe_diameter(Q, v_target=v_target)
-    
+
     # Select standard pipe
     DN, D_internal, D_external = select_standard_pipe(D_calc)
-    
+
     # Recalculate velocity with actual pipe diameter
     v_actual = 4 * Q / (np.pi * D_internal**2)
-    
+
     # Get pipe roughness
     roughness = PIPE_ROUGHNESS[material]
-    
+
     # Calculate equivalent length of fittings
     L_eq = equivalent_length(fittings, D_internal)
     L_total = length + L_eq
-    
+
     # Calculate pressure drop (friction)
     dP_friction, details = pressure_drop_darcy_weisbach(
-        v_actual, L_total, D_internal, roughness
+        v_actual, L_total, D_internal, roughness, rho=rho, mu=mu
     )
     
     # Calculate minor losses (alternative method, for verification)
     K_total = sum(minor_loss_coefficient(f) * n for f, n in fittings.items())
-    dP_minor = pressure_drop_minor_losses(v_actual, K_total)
-    
+    dP_minor = pressure_drop_minor_losses(v_actual, K_total, rho=rho)
+
     # Total pressure drop
     dP_total = dP_friction  # Already includes equivalent length
-    
+
     return {
         'flow_rate_m3h': flow_rate_m3h,
         'flow_rate_m3s': Q,
@@ -641,6 +666,9 @@ def pipe_design_summary(
         'pressure_drop_total_Pa': dP_total,
         'pressure_drop_total_kPa': dP_total / 1000,
         'pressure_drop_total_bar': dP_total / 100000,
+        'fluid_T_celsius': temperature_celsius,
+        'fluid_rho': rho,
+        'fluid_mu': mu,
         'material': material,
         'roughness_m': roughness
     }
