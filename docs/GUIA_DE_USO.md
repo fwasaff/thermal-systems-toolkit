@@ -1,6 +1,6 @@
 # Guía de uso — Thermal Systems Toolkit
 
-> Para Nilton (y para mí mismo dentro de un año, cuando se me haya olvidado por qué escribí esto así).
+> Para un futuro colaborador de proyecto (y para mí mismo dentro de un año, cuando se me haya olvidado por qué escribí esto así).
 
 ## 1. Para qué sirve
 
